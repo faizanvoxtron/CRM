@@ -18,25 +18,25 @@ jobs:
 
             - name: Making git safe directory
               run: |
-                ssh -o StrictHostKeyChecking=no ubuntu@13.61.8.180 << 'EOF'
-                git config --global --add safe.directory /var/www/html/CRM
+                ssh -o StrictHostKeyChecking=no root@38.75.137.11 << 'EOF'
+                git config --global --add safe.directory /root/intern
                 EOF
             
             - name: Deploy To Server
               run: |
-               ssh -o StrictHostKeyChecking=no ubuntu@13.61.8.180 << 'EOF'
+               ssh -o StrictHostKeyChecking=no root@38.75.137.11 << 'EOF'
                set -e
-               cd /var/www/html/CRM/
+               cd /root/intern
                LAST_COMMIT=$(git rev-parse HEAD)
-               echo $LAST_COMMIT > /home/ubuntu/last_commit
+               echo $LAST_COMMIT > /root/last_commit121
 
                git checkout main
                git pull origin main || {
                echo "Deployment Fail"
-               git reset --hard $(cat /home/ubuntu/last_commit);
+               git reset --hard $(cat /root/last_commit121);
                exit 1;
                }
-               chown -R www-data:www-data /var/www/html/CRM
+               #chown -R www-data:www-data /var/www/html/CRM
                EOF
 
             - name: Send mail
@@ -63,4 +63,4 @@ jobs:
                  subject: "Deployment Sucessful"
                  to: ${{secrets.MAIL_USERNAME}}
                  from: faizan.ahmed@voxtrongroup.com
-                 body: Build job completed successfully!
+                 body: Build job completed Fail!
