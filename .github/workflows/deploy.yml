@@ -5,7 +5,7 @@ on:
         - main
 jobs:
     deploy:
-        runs-on: ubantu-latest
+        runs-on: ubuntu-latest
 
         steps:
             - name: Checkout code
@@ -18,22 +18,22 @@ jobs:
 
             - name: Making git safe directory
               run: |
-                ssh -0 StrictHostKeyChecking=no ubuntu@13.61.27.77 << 'EOF'
+                ssh -o StrictHostKeyChecking=no ubuntu@13.61.8.180 << 'EOF'
                 git config --global --add safe.directory /var/www/html/CRM
                 EOF
             
             - name: Deploy To Server
               run: |
-               ssh -0 StrictHostKeyChecking=no ubuntu@13.61.27.77 << 'EOF'
+               ssh -o StrictHostKeyChecking=no ubuntu@13.61.8.180 << 'EOF'
                set -e
                cd /var/www/html/CRM/
                LAST_COMMIT=$(git rev-parse HEAD)
-               echo $LAST_COMMIT > /root/last_commit
+               echo $LAST_COMMIT > /home/ubuntu/last_commit
 
                git checkout main
                git pull origin main || {
                echo "Deployment Fail"
-               git reset --hard $(cat /root/last_commit);
+               git reset --hard $(cat /home/ubuntu/last_commit);
                exit 1;
                }
                chown -R www-data:www-data /var/www/html/CRM
@@ -43,28 +43,24 @@ jobs:
               if: success()
               uses: dawidd6/action-send-mail@v4
               with:
-                 server_address: smtp.gmail.com
+                 server_address: smtp.yandex.com
                  server_port: 465
-                 secure: true
-                 username: ${{secrets.MAIL_USERNAME}}
-                 password: ${{secrets.MAIL_PASSWORD}}
+                 username: faizan.ahmed@voxtrongroup.com
+                 password: ogfwbxcuvmcfzave
                  subject: "Deployment Sucessful"
-                 to: faizan.ahmed@voxtrongroup.com
-                 from: ${{secrets.MAIL_USERNAME}}
+                 to: ${{secrets.MAIL_USERNAME}}
+                 from: faizan.ahmed@voxtrongroup.com
                  body: Build job completed successfully!
             
             - name: Send mail
               if: failure()
               uses: dawidd6/action-send-mail@v4
               with:
-                 server_address: smtp.gmail.com
+                 server_address: smtp.yandex.com
                  server_port: 465
-                 secure: true
-                 username: ${{secrets.MAIL_USERNAME}}
-                 password: ${{secrets.MAIL_PASSWORD}}
+                 username: faizan.ahmed@voxtrongroup.com
+                 password: ogfwbxcuvmcfzave
                  subject: "Deployment Sucessful"
-                 to: faizan.ahmed@voxtrongroup.com
-                 from: ${{secrets.MAIL_USERNAME}}
+                 to: ${{secrets.MAIL_USERNAME}}
+                 from: faizan.ahmed@voxtrongroup.com
                  body: Build job completed successfully!
-            
-
