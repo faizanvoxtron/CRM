@@ -18,17 +18,17 @@ jobs:
 
             - name: Making git safe directory
               run: |
-                ssh -o StrictHostKeyChecking=no root@38.75.137.11 << 'EOF'
-                git config --global --add safe.directory /root/intern
+                ssh -o StrictHostKeyChecking=no ubuntu@13.61.8.180 << 'EOF'
+                git config --global --add safe.directory /var/www/html/CRM
                 EOF
             
             - name: Deploy To Server
               run: |
-               ssh -o StrictHostKeyChecking=no root@38.75.137.11 << 'EOF'
+               ssh -o StrictHostKeyChecking=no ubuntu@13.61.8.180 << 'EOF'
                set -e
                cd /root/intern
                LAST_COMMIT=$(git rev-parse HEAD)
-               echo $LAST_COMMIT > /root/last_commit121
+               echo $LAST_COMMIT > /home/ubuntu/last_commit
 
                git checkout main
                git pull origin main || {
