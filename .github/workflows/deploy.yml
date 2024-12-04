@@ -29,8 +29,6 @@ jobs:
                cd /var/www/html/CRM/
                LAST_COMMIT=$(git rev-parse HEAD)
                echo $LAST_COMMIT > /home/ubuntu/last_commit
-               sudo chown -R ubuntu:ubuntu /var/www/html/CRM/
-               sudo chmod -R u+rw /var/www/html/CRM/
 
                git checkout main
                git pull origin main || {
