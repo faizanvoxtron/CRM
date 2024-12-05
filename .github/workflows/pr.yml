@@ -23,7 +23,7 @@ jobs:
                     This pull request has been created automatically by the workflow.
                     Please review the changes and merge if acceptable.
                pr_reviewer: "Faizan Ahmed"                         # Comma-separated list (no spaces)
-               pr_assignee: "Faizan-Voxtron"                         # Comma-separated list (no spaces)
+               pr_assignee: ""                         # Comma-separated list (no spaces)
                pr_label: "auto-pr"                               # Comma-separated list (no spaces)
                pr_draft: true                                    # Creates pull request as draft
                pr_allow_empty: true                              # Creates pull request even if there are no changes
