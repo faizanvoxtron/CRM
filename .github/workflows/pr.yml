@@ -1,0 +1,58 @@
+name: Create Pull Request
+on:
+    push:
+        branches-ignore:
+            - main
+
+jobs:
+    Create-Pull-Request:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v4
+            
+            - name: Create Pull Request
+              id: Create_Pr
+              uses: diillson/auto-pull-request@v1.0.1
+              with:
+               source_branch: ""                                 # If blank, default: triggered branch
+               destination_branch: "main"                      # If blank, default: master
+               pr_title: "Pulling ${{ github.ref }} into main" # Title of pull request
+               pr_body: |                                        # Full markdown support, requires pr_title to be set
+                  :crown: **An automated PR**
+                    This pull request has been created automatically by the workflow.
+                    Please review the changes and merge if acceptable.
+               pr_reviewer: "Faizan Ahmed"                         # Comma-separated list (no spaces)
+               pr_assignee: "Faizan-Voxtron"                         # Comma-separated list (no spaces)
+               pr_label: "auto-pr"                               # Comma-separated list (no spaces)
+               pr_draft: true                                    # Creates pull request as draft
+               pr_allow_empty: true                              # Creates pull request even if there are no changes
+               github_token: ${{ secrets.CUSTOM_GH_TOKEN }} 
+
+            - name: Getting Extra Information
+              id: repo-info
+              run: |
+                  echo "::set-output name=repo::$(echo $GITHUB_REPOSITORY)"
+
+            - name: Send mail
+              uses: dawidd6/action-send-mail@v4
+              with:
+                server_address: smtp.yandex.com
+                server_port: 465
+                username: faizan.ahmed@voxtrongroup.com
+                password: ogfwbxcuvmcfzave
+                subject: "Deployment Sucessful"
+                to: ${{secrets.MAIL_USERNAME}}
+                from: faizan.ahmed@voxtrongroup.com
+                body: |
+                     A pull request is #${{steps.Create_Pr.outputs.pull-request-number}} has been created for branch ${{ github.ref }} okay
+                     You can view and approve the pull request [here](https://github.com/${{ steps.repo_info.outputs.repo }}/pull/${{steps.Create_Pr.outputs.pull-request-number}}. 
+       
+
+
+
+
+
+
+
+
